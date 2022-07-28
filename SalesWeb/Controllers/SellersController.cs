@@ -51,13 +51,13 @@ namespace SalesWeb.Controllers
 
         public async Task<IActionResult> Delete(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not Provided" });
             }
 
             var obj = await _selerService.FindByIdAsync(id.Value);
-            if(obj == null)
+            if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
@@ -68,11 +68,17 @@ namespace SalesWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _selerService.RemoveAsync(id);
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await _selerService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            }catch(IntegrityException e)
+            {
+                return RedirectToAction(nameof(Error), new { message = e.Message });
+            }
         }
 
-        public async Task<IActionResult> Details (int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -89,14 +95,14 @@ namespace SalesWeb.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not Provided" });
             }
 
             var obj = await _selerService.FindByIdAsync(id.Value);
 
-            if(obj == null)
+            if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not Found" });
             }
@@ -127,8 +133,8 @@ namespace SalesWeb.Controllers
 
             try
             {
-            await _selerService.UpdateAsync(seller);
-            return RedirectToAction(nameof(Index));
+                await _selerService.UpdateAsync(seller);
+                return RedirectToAction(nameof(Index));
             }
             catch (ApplicationException e)
             {

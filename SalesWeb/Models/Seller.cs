@@ -23,8 +23,7 @@ namespace SalesWeb.Models
         [DisplayFormat(DataFormatString = "{0:F2}")]
         public double BaseSalary { get; set; }
 
-
-        [Required(ErrorMessage = "{0} required")]
+        
         public Department Department { get; set; }
 
         public int DepartmentId { get; set; }

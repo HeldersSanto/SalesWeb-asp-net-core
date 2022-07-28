@@ -38,6 +38,13 @@ namespace SalesWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller)
         {
+            if (!ModelState.IsValid)
+            {
+                var department = _departmentService.FindAll();
+
+                SellerFormViewModel viewModel = new SellerFormViewModel { Seller = seller, Departments = department };
+                return View(viewModel);
+            }
             _selerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
